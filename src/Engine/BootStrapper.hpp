@@ -7,5 +7,5 @@
 
 namespace BootStrapper {
     using BootCallback = void(*)(const Address baseAddress);
-    void run(const Address baseAddr, BootCallback bootCallback);
+    void run(const Address baseAddr, const BootCallback bootCallback);
 }

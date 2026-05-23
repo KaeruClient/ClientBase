@@ -5,14 +5,21 @@
 #include "ClientRoot.hpp"
 #include <Windows.h>
 #include <thread>
-#include <chrono>
-#include <Engine/BootStrapper.hpp>
-#include <Utils/Memory/Address.hpp>
+#include <libhat/process.hpp>
 
+#include <Utils/Memory/Address.hpp>
+#include <Engine/BootStrapper.hpp>
 #include "ExceptionHandler.hpp"
+#include <Runtimes/ClientRuntime.hpp>
+#include <Runtimes/GameRuntime.hpp>
 
 auto ClientRoot::init(const Address baseAddress) -> void {
+    ClientRuntime::init(baseAddress);
+    GameRuntime::init(Address(hat::process::get_process_module().address()));
     ExceptionHandler::init();
+
+    // std::thread can be used. This is because we are inside the boot thread here,
+    // so we don't need to worry about loader locks.
     std::thread(ClientRoot::mainThread).detach();
 }
 auto ClientRoot::shutdown() -> void {
@@ -20,6 +27,7 @@ auto ClientRoot::shutdown() -> void {
 }
 
 auto ClientRoot::mainThread() -> void {
+    ClientRuntime::waitUntilExit();
     ClientRoot::shutdown();
 }
 

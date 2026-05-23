@@ -27,12 +27,20 @@ namespace BootStrapper {
             return 0;
         }
     }
-    void run(const Address baseAddr, BootCallback callback) {
+
+
+    /**
+     * @brief Boots the initialization callback in a separate thread to avoid Loader Lock deadlocks.
+     *
+     * @param baseAddr The base address of the client module.
+     * @param bootCallback The callback function to be executed on the new thread.
+     */
+    void run(const Address baseAddr, const BootCallback bootCallback) {
         const auto hModule = reinterpret_cast<HMODULE>(baseAddr.mAddress);
         DisableThreadLibraryCalls(hModule);
 
         // ReSharper disable once CppDFAMemoryLeak
-        const auto params = new detail::ThreadParameters{ baseAddr, callback };
+        const auto params = new detail::ThreadParameters{ baseAddr, bootCallback };
 
         /*
          * Executed under Loader Lock within DllMain.

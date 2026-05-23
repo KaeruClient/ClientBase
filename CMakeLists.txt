@@ -8,7 +8,6 @@ include(cmake/Dependencies.cmake)
 
 add_compile_definitions(
         CLIENT_NAME="${PROJECT_NAME}"
-        TARGET_PROCESS="Minecraft.Windows.exe"
 )
 
 file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.hpp")
