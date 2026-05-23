@@ -9,11 +9,14 @@
 #include <Engine/BootStrapper.hpp>
 #include <Utils/Memory/Address.hpp>
 
-auto ClientRoot::init(const Address baseAddress) -> void {
+#include "ExceptionHandler.hpp"
 
+auto ClientRoot::init(const Address baseAddress) -> void {
+    ExceptionHandler::init();
     std::thread(ClientRoot::mainThread).detach();
 }
 auto ClientRoot::shutdown() -> void {
+    ExceptionHandler::shutdown();
 }
 
 auto ClientRoot::mainThread() -> void {
