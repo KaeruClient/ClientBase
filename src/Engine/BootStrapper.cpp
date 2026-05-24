@@ -39,11 +39,11 @@ namespace BootStrapper {
         DisableThreadLibraryCalls(hModule);
 
         auto params = std::make_unique<detail::ThreadParameters>(baseAddr, bootCallback);
-        auto* rawParams = params.release();
         /*
          * Executed under Loader Lock within DllMain.
          * Using ::CreateThread instead of std::thread to prevent deadlocks.
          */
+        auto* rawParams = params.release();
         const auto hThread = ::CreateThread(
             nullptr,
             0,
@@ -58,5 +58,6 @@ namespace BootStrapper {
             return;
         }
         delete rawParams;
+        assert(false && "[BootStrapper] Failed to create thread!");
     }
 }
