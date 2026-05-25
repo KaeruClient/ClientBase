@@ -13,25 +13,33 @@
 #include <Runtimes/ClientRuntime.hpp>
 #include <Runtimes/GameRuntime.hpp>
 
+#include "Managers/HookManager.hpp"
 #include "SDK/Mappings/Addresses.hpp"
 
 auto ClientRoot::init(const Address baseAddress) -> void {
     ClientRuntime::init(baseAddress);
     GameRuntime::init(Address(hat::process::get_process_module().address()));
-    //ExceptionHandler::init();
+    // ExceptionHandler::init(); マイクラ側の例外ももれずにキャッチしやがるから外しています
     Addresses::init();
+    HookManager::init();
     // std::thread can be used. This is because we are inside the boot thread here,
     // so we don't need to worry about loader locks.
 
-    std::thread(ClientRoot::mainThread).detach();
+    std::thread(ClientRoot::mainThread, baseAddress).detach();
 }
-auto ClientRoot::shutdown() -> void {
+auto ClientRoot::shutdown(const Address& baseAddress) -> void {
+    HookManager::shutdown();
     //ExceptionHandler::shutdown();
+
+    assert(!HookManager::isInitialized() && "Unfortunatelly, HookManager is alive");
+
+    Sleep(100);
+    FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(baseAddress.mAddress), 0);
 }
 
-auto ClientRoot::mainThread() -> void {
-    ClientRuntime::waitUntilExit();
-    ClientRoot::shutdown();
+auto ClientRoot::mainThread(const Address& baseAddress) -> void {
+    ClientRuntime::waitUntilExit(baseAddress);
+    ClientRoot::shutdown(baseAddress);
 }
 
 BOOL APIENTRY DllMain(

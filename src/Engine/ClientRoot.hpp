@@ -10,6 +10,6 @@ public:
     ClientRoot() = delete;
     static auto init(const Address baseAddress) -> void;
 private:
-    static auto shutdown() -> void;
-    static auto mainThread() -> void;
+    static auto shutdown(const Address& ) -> void;
+    static auto mainThread(const Address& baseAddress) -> void;
 };

@@ -7,5 +7,9 @@
 
 namespace Addresses {
     inline Address Keyboard_hold;
+    inline Address Keyboard_release;
+
+    inline Address ClientInstance_update;
+
     void init();
 }

@@ -16,6 +16,14 @@ file(GLOB_RECURSE DEPENDENCIES "deps/*.cpp" "deps/*.hpp")
 add_library(${PROJECT_NAME} SHARED
         ${SOURCES}
         ${DEPENDENCIES}
+        src/Memories/Hooks/Core/ClientInstanceHook.cpp
+        src/Memories/Hooks/Core/ClientInstanceHook.hpp
+        src/SDK/Game/Core/ClientInstance.cpp
+        src/SDK/Game/Core/ClientInstance.hpp
+        src/Managers/HookManager.cpp
+        src/Managers/HookManager.hpp
+        src/Memories/Hooks/Windows/FreeLibraryAndExitHook.cpp
+        src/Memories/Hooks/Windows/FreeLibraryAndExitHook.hpp
 )
 
 link_client_dependencies(${PROJECT_NAME})

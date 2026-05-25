@@ -18,7 +18,12 @@ namespace {
     }
 }
 
+//Current Minecraft Version
+#define v26_21
 
 void Addresses::init() {
-    Keyboard_hold = FindPattern<"56 48 83 EC 70 48 8B 05 ?? ?? ?? ?? 48 31 E0 48 89 44 24 68 80 79">();
+    v26_21 Keyboard_hold = FindPattern<"56 48 83 EC 70 48 8B 05 ?? ?? ?? ?? 48 31 E0 48 89 44 24 68 80 79">();
+    v26_21 Keyboard_release = FindPattern<"48 83 EC 68 48 8B 05 ?? ?? ?? ?? 48 31 E0 48 89 44 24 60 80 79 10">();
+    v26_21 ClientInstance_update = FindPattern<"55 56 57 53 48 81 EC E8 04 00 00 48 8D AC 24 80 00 00 00 48 C7 85 60 04 00 00 FE FF FF FF 89">();
 }
+#undef v26_21

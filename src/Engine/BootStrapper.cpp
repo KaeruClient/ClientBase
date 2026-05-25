@@ -34,7 +34,7 @@ namespace BootStrapper {
      * @param baseAddr The base address of the client module.
      * @param bootCallback The callback function to be executed on the new thread.
      */
-    void run(const Address baseAddr, const BootCallback bootCallback) {
+    void run(const Address& baseAddr, const BootCallback& bootCallback) {
         const auto hModule = reinterpret_cast<HMODULE>(baseAddr.mAddress);
         DisableThreadLibraryCalls(hModule);
 
