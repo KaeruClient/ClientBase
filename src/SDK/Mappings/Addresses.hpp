@@ -6,6 +6,8 @@
 #include "Utils/Memory/Address.hpp"
 
 namespace Addresses {
+    inline Address MinecraftGame_update;
+
     inline Address Keyboard_hold;
     inline Address Keyboard_release;
 

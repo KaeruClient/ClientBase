@@ -21,13 +21,11 @@ private:
     }
 
 public:
-    static auto registerThread() -> void {
+    static auto tryRegisterThread() noexcept -> void {
         auto& instance = getInstance();
         uint32_t expected = 0;
         const uint32_t current_id = ::GetCurrentThreadId();
-        if (!instance.mGameThreadId.compare_exchange_strong(expected, current_id, std::memory_order_release)) {
-            assert(false && "[GameThread] GameThread::registerThread was called twice!");
-        }
+        instance.mGameThreadId.compare_exchange_strong(expected, current_id, std::memory_order_release);
     }
     template <typename F>
     static auto enqueue(F&& task) -> void {

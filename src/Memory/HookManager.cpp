@@ -6,6 +6,7 @@
 
 #include <cassert>
 
+#include "Hooks/Core/MinecraftGameHook.hpp"
 #include "Hooks/Input/KeyboardHook.hpp"
 #include "Hooks/Core/ClientInstanceHook.hpp"
 #include "Hooks/Windows/FreeLibraryAndExitHook.hpp"
@@ -17,6 +18,7 @@ void HookManager::init() {
 
     // Hook Registration Process
     {
+        hooks.emplace_back(std::make_unique<MinecraftGameHook>());
         hooks.emplace_back(std::make_unique<KeyboardHook>());
         hooks.emplace_back(std::make_unique<ClientInstanceHook>());
         hooks.emplace_back(std::make_unique<FreeLibraryAndExitHook>());

@@ -13,11 +13,5 @@ ClientInstanceHook::ClientInstanceHook() {
 }
 
 __int64 ClientInstanceHook::update(ClientInstance* _this, bool a2) {
-    static bool registered = false;
-    if (!registered) {
-        GameThread::registerThread();
-        registered = true;
-    }
-    GameThread::dispatch();
     return oUpdate(_this, a2);
 }
