@@ -7,7 +7,8 @@
 #include "Runtimes/ClientRuntime.hpp"
 
 FreeLibraryAndExitHook::FreeLibraryAndExitHook() {
-    createHook<&FreeLibraryAndExitHook::HookFreeLibraryAndExit>(Address(reinterpret_cast<void*>(::FreeLibraryAndExitThread)), oFreeLibary);
+    const auto address = reinterpret_cast<void*>(::FreeLibraryAndExitThread);
+    createHook<&FreeLibraryAndExitHook::HookFreeLibraryAndExit>(Address(address), oFreeLibrary);
 }
 
 void FreeLibraryAndExitHook::HookFreeLibraryAndExit(HMODULE hModule, DWORD dwExitCode) {
@@ -15,5 +16,5 @@ void FreeLibraryAndExitHook::HookFreeLibraryAndExit(HMODULE hModule, DWORD dwExi
         ClientRuntime::requestShutdown();
         return;
     }
-    return oFreeLibary(hModule, dwExitCode);
+    return oFreeLibrary(hModule, dwExitCode);
 }

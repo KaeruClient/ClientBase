@@ -11,5 +11,5 @@ namespace Addresses {
 
     inline Address ClientInstance_update;
 
-    void init();
+    auto init() -> void;
 }

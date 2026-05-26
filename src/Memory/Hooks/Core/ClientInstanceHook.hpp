@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include <Memories/IHook.hpp>
+#include <Memory/IHook.hpp>
 #include <SDK/Game/Core/ClientInstance.hpp>
 
 class ClientInstanceHook : public IHook {

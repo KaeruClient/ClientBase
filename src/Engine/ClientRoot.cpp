@@ -10,11 +10,11 @@
 #include <Utils/Memory/Address.hpp>
 #include <Engine/BootStrapper.hpp>
 #include "ExceptionHandler.hpp"
+#include <SDK/Mappings/Addresses.hpp>
 #include <Runtimes/ClientRuntime.hpp>
 #include <Runtimes/GameRuntime.hpp>
 
-#include "Managers/HookManager.hpp"
-#include "SDK/Mappings/Addresses.hpp"
+#include <Memory/HookManager.hpp>
 
 auto ClientRoot::init(const Address baseAddress) -> void {
     ClientRuntime::init(baseAddress);
@@ -31,14 +31,14 @@ auto ClientRoot::shutdown(const Address& baseAddress) -> void {
     HookManager::shutdown();
     //ExceptionHandler::shutdown();
 
-    assert(!HookManager::isInitialized() && "Unfortunatelly, HookManager is alive");
+    assert(!HookManager::isInitialized() && "[ClientRoot] Unfortunately, HookManager is alive when unloading.");
 
     Sleep(100);
     FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(baseAddress.mAddress), 0);
 }
 
 auto ClientRoot::mainThread(const Address& baseAddress) -> void {
-    ClientRuntime::waitUntilExit(baseAddress);
+    ClientRuntime::waitUntilExit();
     ClientRoot::shutdown(baseAddress);
 }
 
@@ -47,8 +47,7 @@ BOOL APIENTRY DllMain(
     const DWORD               fdwReason,
     [[ maybe_unused ]] LPVOID lpvReserved)
 {
-    if (fdwReason == DLL_PROCESS_ATTACH) {
+    if (fdwReason == DLL_PROCESS_ATTACH)
         BootStrapper::run(Address(baseAddress), ClientRoot::init);
-    }
     return TRUE;
 }

@@ -13,10 +13,6 @@
 class GameThread {
 private:
     using Task = std::move_only_function<void()>;
-
-    std::queue<Task> mTasks;
-    std::mutex mMutex;
-    std::atomic<uint32_t> mGameThreadId{ 0 };
     GameThread() = default;
 
     static auto getInstance() -> GameThread& {
@@ -64,7 +60,7 @@ public:
                 task();
         }
     }
-    static bool isMe() {
+    [[ nodiscard ]] static auto isMe() -> bool {
         const auto& instance = getInstance();
         const uint32_t cached_id = instance.mGameThreadId.load(std::memory_order_acquire);
 
@@ -73,4 +69,8 @@ public:
 
         return ::GetCurrentThreadId() == cached_id;
     }
+private:
+    std::queue<Task> mTasks;
+    std::mutex mMutex;
+    std::atomic<uint32_t> mGameThreadId{ 0 };
 };

@@ -7,14 +7,14 @@
 
 class ExceptionHandler {
     static inline PVOID mVehHandle = nullptr;
-    static LONG WINAPI handlerCallback(PEXCEPTION_POINTERS exceptionInfo);
+    static auto WINAPI handlerCallback(PEXCEPTION_POINTERS exceptionInfo) -> LONG;
 public:
-    static void init() {
+    static auto init() -> void {
         if (mVehHandle == nullptr)
             mVehHandle = AddVectoredExceptionHandler(1, handlerCallback);
     }
 
-    static void shutdown() {
+    static auto shutdown() -> void {
         if (mVehHandle != nullptr) {
             RemoveVectoredExceptionHandler(mVehHandle);
             mVehHandle = nullptr;

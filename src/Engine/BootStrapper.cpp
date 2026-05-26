@@ -17,7 +17,7 @@ namespace BootStrapper {
             BootCallback callback{};
         };
 
-        static DWORD WINAPI bootThread(LPVOID lpParameter) {
+        static auto WINAPI bootThread(const LPVOID lpParameter) -> DWORD {
             assert(lpParameter != nullptr && "[BootStrapper] BootStrapper::bootThread's lpParameter is nullptr!");
             const std::unique_ptr<ThreadParameters> params(static_cast<ThreadParameters*>(lpParameter));
             if (params->callback)
@@ -34,7 +34,7 @@ namespace BootStrapper {
      * @param baseAddr The base address of the client module.
      * @param bootCallback The callback function to be executed on the new thread.
      */
-    void run(const Address& baseAddr, const BootCallback& bootCallback) {
+    auto run(const Address &baseAddr, const BootCallback &bootCallback) -> void {
         const auto hModule = reinterpret_cast<HMODULE>(baseAddr.mAddress);
         DisableThreadLibraryCalls(hModule);
 

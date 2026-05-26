@@ -27,7 +27,7 @@ namespace Event {
     template <typename T>
     using Holder = nes::event_holder<T>;
 
-    [[nodiscard]] inline auto& getDispatcher() {
+    [[nodiscard]] inline auto getDispatcher() -> Dispatcher&  {
         static Dispatcher instance;
         return instance;
     }
@@ -48,12 +48,12 @@ namespace Event {
     }
 
     template <typename T, auto handler, Priority p = Priority::Regular, typename C>
-    __forceinline void subscribe(C* instance) {
+    __forceinline auto subscribe(C *instance) -> void {
         getDispatcher().listen<T, handler, p>(instance);
     }
 
     template <typename T, auto handler, typename C>
-    __forceinline void unsubscribe(C* instance) {
+    __forceinline auto unsubscribe(C *instance) -> void {
         getDispatcher().deafen<T, handler>(instance);
     }
 }

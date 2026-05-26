@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include <Memories/IHook.hpp>
+#include <Memory/IHook.hpp>
 #include <Zycore/Internal/AtomicMSVC.h>
 
 class FreeLibraryAndExitHook : public IHook {
@@ -12,5 +12,5 @@ public:
     ~FreeLibraryAndExitHook() override = default;
 private:
     static void HookFreeLibraryAndExit(HMODULE hModule, DWORD dwExitCode);
-    static inline decltype(&HookFreeLibraryAndExit) oFreeLibary = nullptr;
+    static inline decltype(&HookFreeLibraryAndExit) oFreeLibrary = nullptr;
 };
