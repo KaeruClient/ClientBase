@@ -38,7 +38,7 @@ public:
         instance.mIsRunning.store(false, std::memory_order_release);
         instance.mIsRunning.notify_all();
     }
-    static __forceinline auto waitUntilExit() noexcept -> void {
+    static __forceinline auto waitUntilExit(const Address& address) noexcept -> void {
         const auto& instance = getInstance();
         while (instance.mIsRunning.load(std::memory_order_acquire)) {
             instance.mIsRunning.wait(true, std::memory_order_relaxed);

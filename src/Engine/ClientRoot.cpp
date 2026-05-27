@@ -25,7 +25,17 @@ auto ClientRoot::init(const Address baseAddress) -> void {
     // std::thread can be used. This is because we are inside the boot thread here,
     // so we don't need to worry about loader locks.
 
-    std::thread(ClientRoot::mainThread, baseAddress).detach();
+    /*
+     こいつが原因でdllのハンドルが削除されないバグが起きている
+     std::thread(ClientRoot::mainThread, baseAddress).detach();*/
+    CreateThread(
+    nullptr,
+    0,
+    reinterpret_cast<LPTHREAD_START_ROUTINE>(ClientRoot::mainThread),
+    reinterpret_cast<LPVOID>(baseAddress.mAddress),
+    0,
+    nullptr
+);
 }
 auto ClientRoot::shutdown(const Address& baseAddress) -> void {
     HookManager::shutdown();
@@ -37,9 +47,9 @@ auto ClientRoot::shutdown(const Address& baseAddress) -> void {
     FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(baseAddress.mAddress), 0);
 }
 
-auto ClientRoot::mainThread(const Address& baseAddress) -> void {
-    ClientRuntime::waitUntilExit();
-    ClientRoot::shutdown(baseAddress);
+auto ClientRoot::mainThread(LPVOID lpAddress) -> void {
+    ClientRuntime::waitUntilExit(Address(reinterpret_cast<uintptr_t>(lpAddress)));
+    ClientRoot::shutdown(Address(reinterpret_cast<uintptr_t>(lpAddress)));
 }
 
 BOOL APIENTRY DllMain(
