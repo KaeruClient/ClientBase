@@ -48,7 +48,7 @@ auto ClientRoot::shutdown(const Address& baseAddress) -> void {
 }
 
 auto ClientRoot::mainThread(LPVOID lpAddress) -> void {
-    ClientRuntime::waitUntilExit(Address(reinterpret_cast<uintptr_t>(lpAddress)));
+    ClientRuntime::waitUntilExit();
     ClientRoot::shutdown(Address(reinterpret_cast<uintptr_t>(lpAddress)));
 }
 
