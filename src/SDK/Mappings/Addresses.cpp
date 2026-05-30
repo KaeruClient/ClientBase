@@ -9,7 +9,7 @@
 
 namespace {
     template <hat::fixed_string Sig>
-    Address FindPattern() {
+    auto FindPattern() -> Address {
         static constexpr auto parsed_sig = hat::compile_signature<Sig>();
         const hat::scan_result result = hat::find_pattern(parsed_sig, ".text");
         if (!result.has_result())
@@ -18,7 +18,7 @@ namespace {
     }
 }
 
-//Current Minecraft Version
+// Current Minecraft Version
 #define v26_21
 auto Addresses::init() -> void {
     v26_21 MinecraftGame_update = FindPattern<"55 41 57 41 56 41 55 41 54 56 57 53 48 81 EC F8 03 00 00 48 8D AC 24 80 00 00 00 66">();
