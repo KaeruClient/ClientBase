@@ -4,9 +4,9 @@
 
 #include "MinecraftGameHook.hpp"
 
-#include "Engine/GameThread.hpp"
-#include "SDK/Mappings/Addresses.hpp"
-
+#include <Engine/GameThread.hpp>
+#include <SDK/Mappings/Addresses.hpp>
+#include <SDK/Game/Core/MinecraftGame.hpp>
 MinecraftGameHook::MinecraftGameHook() {
     const auto targetAddress = Address(Addresses::MinecraftGame_update);
     createHook<&MinecraftGameHook::update>(targetAddress, oUpdate);
