@@ -24,32 +24,23 @@ auto ClientRoot::init(const Address baseAddress) -> void {
     HookManager::init();
     // std::thread can be used. This is because we are inside the boot thread here,
     // so we don't need to worry about loader locks.
-
-    /*
-     こいつが原因でdllのハンドルが削除されないバグが起きている
-     std::thread(ClientRoot::mainThread, baseAddress).detach();*/
-    CreateThread(
-    nullptr,
-    0,
-    reinterpret_cast<LPTHREAD_START_ROUTINE>(ClientRoot::mainThread),
-    reinterpret_cast<LPVOID>(baseAddress.mAddress),
-    0,
-    nullptr
-);
+    std::thread(ClientRoot::mainThread, baseAddress).detach();
 }
-auto ClientRoot::shutdown(const Address& baseAddress) -> void {
+auto ClientRoot::shutdown(const Address baseAddress) -> void {
     HookManager::shutdown();
     //ExceptionHandler::shutdown();
 
     assert(!HookManager::isInitialized() && "[ClientRoot] Unfortunately, HookManager is alive when unloading.");
 
-    Sleep(100);
-    FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(baseAddress.mAddress), 0);
+    ::CreateThread(nullptr, 0, [](const LPVOID lpParam) -> DWORD {
+        Sleep(100);
+        FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), 0);
+    }, reinterpret_cast<LPVOID>(baseAddress.mAddress), 0, nullptr);
 }
 
-auto ClientRoot::mainThread(LPVOID lpAddress) -> void {
+auto ClientRoot::mainThread(const Address baseAddress) -> void {
     ClientRuntime::waitUntilExit();
-    ClientRoot::shutdown(Address(reinterpret_cast<uintptr_t>(lpAddress)));
+    ClientRoot::shutdown(baseAddress);
 }
 
 BOOL APIENTRY DllMain(
