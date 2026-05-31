@@ -36,8 +36,8 @@ public:
     __forceinline auto setKeybind(const int keybind)  noexcept -> void { mKeybind = keybind; }
     __forceinline auto addSetting(std::unique_ptr<ISetting> setting) -> void { mSettings.push_back(std::move(setting)); }
 
-    virtual void onEnable();
-    virtual void onDisable();
+    virtual auto onEnable()  -> void {}
+    virtual auto onDisable() -> void {}
 private:
     Category    mCategory;
     std::string mName;
