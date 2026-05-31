@@ -4,20 +4,23 @@
 
 #pragma once
 #include <filesystem>
-#include <nlohmann/json.hpp>
-#include <string>
-
 class ClientStorage final {
     using FilePath = std::filesystem::path;
-    using Json = nlohmann::json;
 public:
-    ClientStorage() = default;
+    ClientStorage(const ClientStorage&) = delete;
+    ClientStorage& operator=(const ClientStorage&) = delete;
+    ClientStorage(ClientStorage&&) = delete;
+    ClientStorage& operator=(ClientStorage&&) = delete;
+    [[nodiscard]] static auto getPath(const std::string& subPath) -> FilePath;
+private:
+    ClientStorage();
     ~ClientStorage() = default;
 
-    auto init() -> void;
-    [[nodiscard]] auto getPath(const std::string& subPath) const -> FilePath;
-private:
     [[nodiscard]] static auto getRoamingFolder() -> FilePath;
     [[nodiscard]] static auto getClientPath()    -> FilePath;
+    [[nodiscard]] static auto getInstance()      -> ClientStorage & {
+        static ClientStorage instance;
+        return instance;
+    }
     FilePath mRootPath;
 };
