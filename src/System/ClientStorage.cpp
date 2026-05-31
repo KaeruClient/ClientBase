@@ -14,9 +14,8 @@ auto ClientStorage::getPath(const std::string& subPath) -> FilePath {
 
 ClientStorage::ClientStorage() {
     mRootPath = getClientPath();
-    if (!fs::exists(mRootPath)) {
+    if (!fs::exists(mRootPath))
         fs::create_directories(mRootPath);
-    }
 }
 
 auto ClientStorage::getRoamingFolder() -> FilePath {
@@ -24,19 +23,13 @@ auto ClientStorage::getRoamingFolder() -> FilePath {
         const auto path = ApplicationData::Current().RoamingFolder().Path();
         return FilePath(path.c_str());
     } catch (const winrt::hresult_error& e) {
-#ifdef _DEBUG
         assert(false && "[ClientStorage] getRoamingFolder() was an WinRT error occurred");
-#endif
     } catch (const std::exception& e) {
-#ifdef _DEBUG
         assert(false && "[ClientStorage] getRoamingFolder() was an exception occurred.");
-#endif
     }
-#ifdef _DEBUG
     assert(false && "[ClientStorage] getRoamingFolder() was an unknown error occurred.");
-#elif
+    // ReSharper disable once CppDFAUnreachableCode
     std::unreachable();
-#endif
 }
 
 auto ClientStorage::getClientPath() -> FilePath {
