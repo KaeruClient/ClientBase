@@ -13,6 +13,7 @@ public:
     virtual ~ISetting() = default;
     [[nodiscard]] __forceinline auto getName()        const noexcept -> const std::string & { return mName; }
     [[nodiscard]] __forceinline auto getDescription() const noexcept -> const std::string & { return mDescription; }
+    [[nodiscard]] __forceinline auto getType()        const noexcept -> SettingType { return mType; }
 private:
     std::string mName;
     std::string mDescription;
