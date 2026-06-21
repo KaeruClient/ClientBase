@@ -1,0 +1,31 @@
+<div align="center">
+    <h1> Starfall </h1>
+    <p>
+        <img src="https://img.shields.io/badge/Language-C%2B%2B-blue?style=for-the-badge&logo=c%2B%2B" />
+        <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows" />
+        <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+    </p>
+    <p>
+        <b>Starfall</b> is an open-source base of utility mod designed to enhance the gameplay experience of Minecraft: Bedrock Edition.
+    </p>
+</div>
+
+---
+
+<div align="center">
+    <h2> Disclaimer </h2>
+    <p>
+        We assume no responsibility whatsoever for any actions taken using this utility mod. <br>
+        <b>Use at your own risk.</b>    
+    </p>
+</div>
+
+---
+
+<div align="center">
+    <h2> License </h2>
+    <p>
+        This project is licensed under the <b>MIT License</b>. <br>
+        See the <a href="./LICENSE">LICENSE</a> file for details.
+    </p>
+</div>
