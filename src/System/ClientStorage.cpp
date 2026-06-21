@@ -21,7 +21,7 @@ ClientStorage::ClientStorage() {
 auto ClientStorage::getRoamingFolder() -> FilePath {
     try {
         const auto path = ApplicationData::Current().RoamingFolder().Path();
-        return FilePath(path.c_str());
+        return path.c_str();
     } catch (const winrt::hresult_error& e) {
         assert(false && "[ClientStorage] getRoamingFolder() was an WinRT error occurred");
     } catch (const std::exception& e) {
