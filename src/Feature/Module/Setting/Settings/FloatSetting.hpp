@@ -9,9 +9,9 @@ class FloatSetting final : public ISetting {
     using ValueType = float;
     static constexpr auto TYPE = SettingType::FLOAT;
 public:
-    FloatSetting(std::string name, std::string description, ValueType &value, const ValueType maxValue,
-                 const ValueType minValue) : ISetting(TYPE, std::move(name), std::move(description)), mMaxValue(maxValue),
-                                             mMinValue(minValue), mValue(value) {}
+    FloatSetting(std::string name, std::string description, ValueType &value, const ValueType minValue,
+                 const ValueType maxValue) : ISetting(TYPE, std::move(name), std::move(description)), mMinValue(minValue),
+                                             mMaxValue(maxValue), mValue(value) {}
     ~FloatSetting() override = default;
 
     [[nodiscard]] __forceinline auto getMaxValue() const noexcept -> ValueType { return mMaxValue; }
@@ -20,7 +20,7 @@ public:
     // ReSharper disable once CppMemberFunctionMayBeConst
     __forceinline auto setValue(const ValueType value) noexcept -> void { mValue = std::clamp(value, mMinValue, mMaxValue); }
 private:
-    const ValueType  mMaxValue;
     const ValueType  mMinValue;
+    const ValueType  mMaxValue;
     ValueType&       mValue;
 };
