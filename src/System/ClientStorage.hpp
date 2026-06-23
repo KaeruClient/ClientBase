@@ -11,7 +11,7 @@ public:
     ClientStorage& operator=(const ClientStorage&) = delete;
     ClientStorage(ClientStorage&&) = delete;
     ClientStorage& operator=(ClientStorage&&) = delete;
-    [[nodiscard]] static auto getPath(const std::string& subPath) -> FilePath;
+    [[nodiscard]] static auto getPath(const FilePath& subPath) -> FilePath;
 private:
     ClientStorage();
     ~ClientStorage() = default;

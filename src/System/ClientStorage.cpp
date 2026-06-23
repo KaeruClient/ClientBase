@@ -8,7 +8,7 @@
 
 using namespace winrt::Windows::Storage;
 namespace fs = std::filesystem;
-auto ClientStorage::getPath(const std::string& subPath) -> FilePath {
+auto ClientStorage::getPath(const FilePath& subPath) -> FilePath {
     return getInstance().mRootPath / subPath;
 }
 
@@ -22,9 +22,9 @@ auto ClientStorage::getRoamingFolder() -> FilePath {
     try {
         const auto path = ApplicationData::Current().RoamingFolder().Path();
         return path.c_str();
-    } catch (const winrt::hresult_error& e) {
+    } catch ([[maybe_unused]] const winrt::hresult_error& e) {
         assert(false && "[ClientStorage] getRoamingFolder() was an WinRT error occurred");
-    } catch (const std::exception& e) {
+    } catch ([[maybe_unused]] const std::exception& e) {
         assert(false && "[ClientStorage] getRoamingFolder() was an exception occurred.");
     }
     assert(false && "[ClientStorage] getRoamingFolder() was an unknown error occurred.");
