@@ -13,6 +13,20 @@
 ---
 
 <div align="center">
+    <h2> Getting Started </h2>
+    <p>
+        This repository is designed as a <b>Template</b>. You can create your own private/public repository based on Starfall with just one click!
+    </p>
+    <p>
+        1. Click the green <b>"Use this template"</b> button at the top of this repository pages.<br>
+        2. Select <b>"Create a new repository"</b>.<br>
+        3. Choose your repository name and visibility (Public or Private), then start building your own mod!
+    </p>
+</div>
+
+---
+
+<div align="center">
     <h2> Disclaimer </h2>
     <p>
         We assume no responsibility whatsoever for any actions taken using this utility mod. <br>
