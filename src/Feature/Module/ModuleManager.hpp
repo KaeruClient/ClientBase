@@ -60,6 +60,10 @@ public:
         buildCacheMap();
     }
     ~ModuleManager() = default;
+
+    auto saveConfig(nlohmann::json& modulesJson) const -> void;
+    auto loadConfig(const nlohmann::json& modulesJson) const -> void;
+
     template <typename T> requires std::derived_from<T, IModule>
     [[nodiscard]] auto getModule() const -> T& {
         const auto it = mCacheMap.find(std::type_index(typeid(T)));

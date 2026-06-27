@@ -5,8 +5,13 @@
 #pragma once
 #include <atomic>
 #include <cassert>
+#include <memory>
 
 #include "Utils/Memory/Address.hpp"
+
+class ConfigManager;
+class HookManager;
+class ModuleManager;
 
 class ClientRuntime final {
 public:
@@ -15,14 +20,14 @@ public:
     ClientRuntime(ClientRuntime&&) = delete;
     ClientRuntime& operator=(ClientRuntime&&) = delete;
 
-    static __forceinline auto init(const Address address) noexcept -> void {
+    static __forceinline auto setBaseAddress(const Address address) noexcept -> void {
         auto& instance = getInstance();
         assert(instance.mBaseAddress.mAddress == 0x0 && "[ClientRuntime] Already initialized!");
         instance.mBaseAddress = address;
     }
     /**
-     * @note This function is thread-safe ONLY AFTER init() has been called.
-     *       Ensure init() completes on the main/boot thread before accessing this.
+     * @note This function is thread-safe ONLY AFTER setBaseAddress() has been called.
+     *       Ensure setBaseAddress() completes on the main/boot thread before accessing this.
      */
     [[ nodiscard ]] static __forceinline auto getBaseAddress() noexcept -> Address {
         const auto& instance = getInstance();
@@ -44,9 +49,29 @@ public:
             instance.mIsRunning.wait(true, std::memory_order_relaxed);
         }
     }
+    static auto initComponents() -> void;
+    [[ nodiscard ]] static __forceinline auto getModuleManager() noexcept -> ModuleManager & {
+        const auto& instance = getInstance();
+        assert(instance.mModuleManager.get() != nullptr && "[ClientRuntime] getModuleManager() was called before initComponents()!");
+        return *instance.mModuleManager;
+    }
+
+    [[ nodiscard ]] static __forceinline auto getConfigManager() noexcept -> ConfigManager & {
+        const auto& instance = getInstance();
+        assert(instance.mConfigManager.get() != nullptr && "[ClientRuntime] getConfigManager() was called before initComponents()!");
+        return *instance.mConfigManager;
+    }
+
+    [[ nodiscard ]] static __forceinline auto getHookManager() noexcept -> HookManager & {
+        const auto& instance = getInstance();
+        assert(instance.mHookManager.get() != nullptr && "[ClientRuntime] getHookManager() was called before initComponents()!");
+        return *instance.mHookManager;
+    }
+
+
 private:
-    ClientRuntime() = default;
-    ~ClientRuntime() = default;
+    ClientRuntime();
+    ~ClientRuntime();
 
     [[ nodiscard ]] static auto getInstance() noexcept -> ClientRuntime & {
         static ClientRuntime instance;
@@ -55,4 +80,8 @@ private:
 
     Address           mBaseAddress = Address(nullptr);
     std::atomic<bool> mIsRunning   = {true};
+
+    std::unique_ptr<ModuleManager> mModuleManager;
+    std::unique_ptr<ConfigManager> mConfigManager;
+    std::unique_ptr<HookManager>   mHookManager;
 };

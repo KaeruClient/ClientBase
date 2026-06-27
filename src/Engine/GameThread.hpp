@@ -25,7 +25,9 @@ public:
         auto& instance = getInstance();
         uint32_t expected = 0;
         const uint32_t current_id = ::GetCurrentThreadId();
-        instance.mGameThreadId.compare_exchange_strong(expected, current_id, std::memory_order_release);
+        if (instance.mGameThreadId.compare_exchange_strong(expected, current_id, std::memory_order_release)) {
+            instance.mGameThreadId.notify_all();
+        }
     }
     template <typename F>
     static auto enqueue(F&& task) -> void {
@@ -62,10 +64,23 @@ public:
         const auto& instance = getInstance();
         const uint32_t cached_id = instance.mGameThreadId.load(std::memory_order_acquire);
 
-        assert(cached_id != 0 &&
+        assert(isInitialized() &&
                "[GameThread] GameThread::isMe() was called before initialized!");
 
         return ::GetCurrentThreadId() == cached_id;
+    }
+    [[nodiscard]] static auto isInitialized() -> bool {
+        const auto& instance = getInstance();
+        const uint32_t cached_id = instance.mGameThreadId.load(std::memory_order_acquire);
+        return cached_id != 0;
+    }
+    static auto waitUntilInit() -> void {
+        const auto& instance = getInstance();
+        uint32_t cached_id = instance.mGameThreadId.load(std::memory_order_acquire);
+        while (cached_id == 0) {
+            instance.mGameThreadId.wait(0, std::memory_order_acquire);
+            cached_id = instance.mGameThreadId.load(std::memory_order_acquire);
+        }
     }
 private:
     std::queue<Task> mTasks;

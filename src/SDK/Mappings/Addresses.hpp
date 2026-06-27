@@ -11,5 +11,6 @@ namespace Addresses {
     inline Address Keyboard_hold;
     inline Address Keyboard_release;
 
+    auto initMinimal() -> void;
     auto init() -> void;
 }

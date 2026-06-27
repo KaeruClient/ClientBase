@@ -16,23 +16,30 @@
 
 #include <Memory/HookManager.hpp>
 
+#include "GameThread.hpp"
+#include "Config/ConfigManager.hpp"
+
+
 auto ClientRoot::init(const Address baseAddress) -> void {
-    ClientRuntime::init(baseAddress);
-    GameRuntime::init(Address(hat::process::get_process_module().address()));
+    ClientRuntime::setBaseAddress(baseAddress);
+    GameRuntime::setBaseAddress(Address(hat::process::get_process_module().address()));
     // ExceptionHandler::init(); マイクラ側の例外ももれずにキャッチしやがるから外しています
+
+    Addresses::initMinimal();
+    ClientRuntime::initComponents();
+    ClientRuntime::getHookManager().initMinimal();
+    GameThread::waitUntilInit();
+    ClientRuntime::getConfigManager().setup();
     Addresses::init();
-    HookManager::init();
     // std::thread can be used. This is because we are inside the boot thread here,
     // so we don't need to worry about loader locks.
+
     std::thread(ClientRoot::mainThread, baseAddress).detach();
 }
 auto ClientRoot::shutdown(const Address baseAddress) -> void {
-    HookManager::shutdown();
     //ExceptionHandler::shutdown();
 
-    assert(!HookManager::isInitialized() && "[ClientRoot] Unfortunately, HookManager is alive when unloading.");
-
-    ::CreateThread(nullptr, 0, [](const LPVOID lpParam) -> DWORD {
+    ::CreateThread(nullptr, 0, [](LPVOID const lpParam) -> DWORD {
         Sleep(100);
         FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), 0);
     }, reinterpret_cast<LPVOID>(baseAddress.mAddress), 0, nullptr);

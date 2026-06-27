@@ -10,24 +10,11 @@
 #include "Hooks/Input/KeyboardHook.hpp"
 #include "Hooks/Windows/FreeLibraryAndExitHook.hpp"
 
-void HookManager::init() {
-    auto& instance = getInstance();
-    auto& hooks = instance.mHooks;
-    assert(hooks.empty() && "[HookManager] Already called init()!");
-
-    // Hook Registration Process
-    {
-        hooks.emplace_back(std::make_unique<MinecraftGameHook>());
-        hooks.emplace_back(std::make_unique<KeyboardHook>());
-        hooks.emplace_back(std::make_unique<FreeLibraryAndExitHook>());
-    }
-
-    instance.mInitialized = true;
+auto HookManager::initMinimal() -> void {
+    mHooks.emplace_back(std::make_unique<MinecraftGameHook>());
 }
 
-void HookManager::shutdown() {
-    auto& instance = getInstance();
-    assert(instance.mInitialized && "[HookManager] init() wasn't called!");
-    instance.mHooks.clear();
-    instance.mInitialized = false;
+auto HookManager::initComponents() -> void {
+    mHooks.emplace_back(std::make_unique<KeyboardHook>());
+    mHooks.emplace_back(std::make_unique<FreeLibraryAndExitHook>());
 }

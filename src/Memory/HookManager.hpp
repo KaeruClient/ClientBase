@@ -7,26 +7,12 @@
 #include <vector>
 #include <Memory/IHook.hpp>
 
-class HookManager {
+class HookManager final {
 public:
-    HookManager(const HookManager&) = delete;
-    HookManager& operator=(const HookManager&) = delete;
-    HookManager(HookManager&&) = delete;
-    HookManager& operator=(HookManager&&) = delete;
-    static auto init() -> void;
-    static auto shutdown() -> void;
-private:
     HookManager() = default;
     ~HookManager() = default;
-    [[ nodiscard ]] static auto getInstance() noexcept -> HookManager& {
-        static HookManager instance;
-        return instance;
-    }
-public:
-    [[ nodiscard ]] static __forceinline auto isInitialized() noexcept -> bool {
-        return getInstance().mInitialized;
-    }
+    auto initMinimal() -> void;
+    auto initComponents() -> void;
 private:
     std::vector<std::unique_ptr<IHook>> mHooks{};
-    bool mInitialized = false;
 };

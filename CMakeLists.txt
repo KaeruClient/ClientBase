@@ -16,6 +16,7 @@ file(GLOB_RECURSE DEPENDENCIES "deps/*.cpp" "deps/*.hpp")
 add_library(${PROJECT_NAME} SHARED
         ${SOURCES}
         ${DEPENDENCIES}
+        src/Feature/Module/IModule.cpp
 )
 
 link_client_dependencies(${PROJECT_NAME})

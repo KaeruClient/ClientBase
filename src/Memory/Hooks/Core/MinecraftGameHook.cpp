@@ -8,8 +8,9 @@
 #include <SDK/Mappings/Addresses.hpp>
 #include <SDK/Game/Core/MinecraftGame.hpp>
 MinecraftGameHook::MinecraftGameHook() {
-    const auto targetAddress = Address(Addresses::MinecraftGame_update);
-    createHook<&MinecraftGameHook::update>(targetAddress, oUpdate);
+    createHook<&MinecraftGameHook::update>(
+        Addresses::MinecraftGame_update,
+        oUpdate);
 }
 
 void MinecraftGameHook::update(MinecraftGame* _this) {

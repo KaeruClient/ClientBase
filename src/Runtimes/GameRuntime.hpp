@@ -15,14 +15,14 @@ public:
     GameRuntime(GameRuntime&&) = delete;
     GameRuntime& operator=(GameRuntime&&) = delete;
 
-    static __forceinline auto init(const Address address) noexcept -> void {
+    static __forceinline auto setBaseAddress(const Address address) noexcept -> void {
         auto& instance = getInstance();
         assert(instance.mBaseAddress.mAddress == 0x0 && "[GameRuntime] Already initialized!");
         instance.mBaseAddress = address;
     }
     /**
-     * @note This function is thread-safe ONLY AFTER init() has been called.
-     *       Ensure init() completes on the main/boot thread before accessing this.
+     * @note This function is thread-safe ONLY AFTER setBaseAddress() has been called.
+     *       Ensure setBaseAddress() completes on the main/boot thread before accessing this.
      */
     static __forceinline auto getBaseAddress() noexcept -> Address {
         const auto& instance = getInstance();
