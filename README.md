@@ -1,12 +1,12 @@
 <div align="center">
-    <h1> Starfall </h1>
+    <h1> ClientBase </h1>
     <p>
         <img src="https://img.shields.io/badge/Language-C%2B%2B-blue?style=for-the-badge&logo=c%2B%2B" />
         <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows" />
         <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
     </p>
     <p>
-        <b>Starfall</b> is an open-source base of utility mod designed to enhance the gameplay experience of Minecraft: Bedrock Edition.
+        <b>ClientBase</b> is an open-source base of utility mod designed to enhance the gameplay experience of Minecraft: Bedrock Edition.
     </p>
 </div>
 
