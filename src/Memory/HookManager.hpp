@@ -10,7 +10,7 @@
 class HookManager final {
 public:
     HookManager() = default;
-    ~HookManager() = default;
+    ~HookManager();
     auto initMinimal() -> void;
     auto initComponents() -> void;
 private:

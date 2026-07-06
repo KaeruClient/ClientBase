@@ -50,6 +50,7 @@ public:
         }
     }
     static auto initComponents() -> void;
+    static auto reset() -> void;
     [[ nodiscard ]] static __forceinline auto getModuleManager() noexcept -> ModuleManager & {
         const auto& instance = getInstance();
         assert(instance.mModuleManager.get() != nullptr && "[ClientRuntime] getModuleManager() was called before initComponents()!");

@@ -14,5 +14,12 @@ auto ClientRuntime::initComponents() -> void {
     instance.mHookManager   = std::make_unique<HookManager>();
 }
 
+auto ClientRuntime::reset() -> void {
+    auto& instance = getInstance();
+    instance.mHookManager.reset();
+    instance.mConfigManager.reset();
+    instance.mModuleManager.reset();
+}
+
 ClientRuntime::ClientRuntime() = default;
 ClientRuntime::~ClientRuntime() = default;

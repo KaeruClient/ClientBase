@@ -30,17 +30,18 @@ auto ClientRoot::init(const Address baseAddress) -> void {
     GameThread::waitUntilInit();
     ClientRuntime::getConfigManager().setup();
     Addresses::init();
-    // std::thread can be used. This is because we are inside the boot thread here,
-    // so we don't need to worry about loader locks.
-    std::thread(ClientRoot::mainThread, baseAddress).detach();
+    ::CreateThread(
+        nullptr,
+        0,
+        reinterpret_cast<LPTHREAD_START_ROUTINE>(mainThread),
+        reinterpret_cast<LPVOID>(baseAddress.mAddress),
+        0,
+        nullptr);
 }
 auto ClientRoot::shutdown(const Address baseAddress) -> void {
     //ExceptionHandler::shutdown();
-
-    ::CreateThread(nullptr, 0, [](LPVOID const lpParam) -> DWORD {
-        Sleep(100);
-        FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), 0);
-    }, reinterpret_cast<LPVOID>(baseAddress.mAddress), 0, nullptr);
+    ClientRuntime::reset();
+    FreeLibraryAndExitThread(reinterpret_cast<HMODULE>(baseAddress.mAddress), 0);
 }
 
 auto ClientRoot::mainThread(const Address baseAddress) -> void {

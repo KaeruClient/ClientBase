@@ -10,6 +10,11 @@
 #include "Hooks/Input/KeyboardHook.hpp"
 #include "Hooks/Windows/FreeLibraryAndExitHook.hpp"
 
+HookManager::~HookManager() {
+    mHooks.clear();
+    HookGuard::wait();
+}
+
 auto HookManager::initMinimal() -> void {
     mHooks.emplace_back(std::make_unique<MinecraftGameHook>());
 }
